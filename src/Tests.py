@@ -16,5 +16,12 @@ class TestLoadingCSV(unittest.TestCase):
         result=load_dataset_to_csv("dataset/news_articles_large.csv")
         self.assertEqual(10000,len(result))
 
+class TestJaccardSim(unittest.TestCase):
+    def test1(self):
+        set1 = {1,4,5,6}
+        set2 = {5,8,9,10}
+
+        self.assertEqual(1/7,Jaccard_sim(set1,set2))
+
 if __name__ == '__main__':
     unittest.main()
