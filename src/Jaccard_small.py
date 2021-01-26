@@ -1,10 +1,6 @@
 from Util import *
 
-
-def calculate_jacc_sim(self):
-    pass
-
-
+import operator
 if __name__ == '__main__':
     data = load_dataset_to_csv("dataset/news_articles_small.csv")
     make_shingles(data)
@@ -20,10 +16,12 @@ if __name__ == '__main__':
          "80-90": 0,
          "90-100": 0,
          }
+    temp={}
     for article1 in data:
         for article2 in data:
             if article1 != article2:
                 sim = Jaccard_sim(article1.shingles,article2.shingles)
+                temp[(article1.ID,article2.ID)]=sim
                 if sim < 0.10:
                     d["0-10"] += 1
                 elif sim <0.20:
@@ -45,4 +43,6 @@ if __name__ == '__main__':
                 else:
                     d["90-100"] += 1
 
-    breakpoint()
+    a = max(temp.items(), key=operator.itemgetter(1))[0]
+    print(a)
+    plot_bargraph(d)

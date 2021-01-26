@@ -84,9 +84,8 @@ def universal_hashing():
         return ((a * x + b) % p) % m
     return h
 
-def plot_bargraph(jac_sim):
+def plot_bargraph(data):
     # creating the dataset
-    data = {'0-10': 20, '10-20': 15, '20-30': 30,'30-40': 30,'40-50': 30,'50-60': 30,'60-70': 30,'70-80': 30,'80-90': 30, '90-100': 30}
     courses = list(data.keys())
     values = list(data.values())
 
@@ -100,9 +99,3 @@ def plot_bargraph(jac_sim):
     plt.ylabel("Number of articles")
     plt.title("Number of articles in function of their similarity with each other (using 1000 articles)")
     plt.show()
-
-
-loaded=load_dataset_to_csv("dataset/news_articles_small.csv")
-make_shingles(loaded)
-hash_shingles(loaded)
-minhash_shingles(loaded,20)
