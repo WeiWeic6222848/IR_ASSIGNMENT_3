@@ -10,7 +10,8 @@ def load_dataset_to_csv(filename):
         parsing = f.readline()
         result = []
         while len(parsing)>0:
-            parsing = parsing.split(",")
+            parsing = parsing.split(",",maxsplit=1)
+            parsing[1]=parsing[1].strip().strip("\"")
             result.append(NewsArticle(parsing[0], parsing[1]))
             parsing = f.readline()
         return result
