@@ -3,7 +3,7 @@ class NewsArticle():
         self.ID = ID
         self.content = content
 
-        content = content.casefold()
+        content = content.casefold().replace(",","").replace(".","")
         token = dict.fromkeys(content.split())
         for word in stopwords:
             token.pop(word, None)  # remove all frequent stopwords
