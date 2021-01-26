@@ -11,6 +11,11 @@ class NewsArticle():
         self.token = list(token)
 
 def Jaccard_sim(set1, set2):
+    if not isinstance(set1,set):
+        set1 = set(set1)
+    if not isinstance(set2,set):
+        set2 = set(set2)
+
     intersec_size = len(set1.intersection(set2))
     union_size = (len(set1)+len(set2)) - intersec_size
     return intersec_size/union_size
