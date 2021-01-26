@@ -12,17 +12,21 @@ stopwords = {"ourselves", "hers", "between", "yourself", "but", "again", "there"
              "doing", "it", "how", "further", "was", "here", "than"}
 
 class NewsArticle():
-    def __init__(self,ID, content):
-        self.ID= ID
-        self.content= content
+    def __init__(self, ID, content, preprocessing=True):
+        self.ID = ID
+        self.content = content
         self.shingles = []
         self.min_hashed_shingles = []
-        content = content.casefold().replace(",","").replace(".","")
-        tokens = dict.fromkeys(content.split())
-        for word in stopwords:
-            tokens.pop(word, None)  # remove all frequent stopwords
 
-        self.tokens = list(tokens)
+        if not preprocessing:
+            self.tokens = list(dict.fromkeys(content.split()))
+        else:
+            content = content.casefold().replace(",", "").replace(".", "")  # casefolding and remove punctuations
+            token = dict.fromkeys(content.split())
+            for word in stopwords:
+                token.pop(word, None)  # remove all frequent stopwords
+            self.tokens = list(token)
+
 
 def Jaccard_sim(set1, set2):
     if not isinstance(set1,set):
@@ -31,8 +35,9 @@ def Jaccard_sim(set1, set2):
         set2 = set(set2)
 
     intersec_size = len(set1.intersection(set2))
-    union_size = (len(set1)+len(set2)) - intersec_size
-    return intersec_size/union_size
+    union_size = (len(set1) + len(set2)) - intersec_size
+    return intersec_size / union_size
+
 
 def load_dataset_to_csv(filename):
     with open(filename) as f:
@@ -41,8 +46,10 @@ def load_dataset_to_csv(filename):
         result = []
         while len(parsing) > 0:
             parsing = parsing.split(",", maxsplit=1)
-            parsing[1] = parsing[1].strip().strip("\"")
-            result.append(NewsArticle(parsing[0], parsing[1]))
+            parsing[1] = parsing[1] \
+                .strip().strip("\"")  # striping white spaces in the end, then strip unnecessary symbol
+            assert (len(parsing) == 2)  # asserting column size
+            result.append(NewsArticle(parsing[0], parsing[1]))  # we inherently know there are two columns
             parsing = f.readline()
         return result
 
@@ -60,12 +67,30 @@ def minhash_shingles(articles,k): #k = number of hash functions to use
     hash_funcs = []
     for i in range(k):
         hash_funcs.append(universal_hashing())
-
     for article in articles:
         for j in range(k):
             for i in range(len(article.shingles)):
                 article.shingles[i] = hash_funcs[j](article.shingles[i])
             article.min_hashed_shingles.append(min(article.shingles))
+
+
+def LSH(articles, band, row, hashFunction=hash):
+    assert (len(articles) > 0)  # no empty matrix
+    assert (len(articles[0].min_hashed_shingles) == band * row)  # matrix length = band*row
+    buckets = dict()
+    for i in range(band):
+        for article in articles:
+            shingles = article.min_hashed_shingles
+            shinglesInBand = shingles[i * row:(i + 1) * row]
+            hashed = 0
+            for obj in shinglesInBand:
+                tmphash = hashFunction(obj)
+                hashed = hashed + hashFunction(obj)  # add up multiple hash
+            bucket = buckets.get(hashed, [])
+            bucket.append(article.ID)
+            buckets[hashed] = bucket  # put into bucket
+    return buckets
+
 
 
 def universal_hashing():

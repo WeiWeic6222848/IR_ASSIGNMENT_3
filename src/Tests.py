@@ -1,7 +1,9 @@
+import os
+
 from Util import *
 
 import unittest
-
+import tempfile
 class TestLoadingCSV(unittest.TestCase):
 
     def test_small(self):
@@ -15,6 +17,16 @@ class TestLoadingCSV(unittest.TestCase):
     def test_large(self):
         result=load_dataset_to_csv("dataset/news_articles_large.csv")
         self.assertEqual(10000,len(result))
+        self.assertEqual("Jason Miller, 17, was among the fans who came to see Tyson released. \"\"We just came because he's the greatest fighter of all time and he was held unjustly,\"\" Miller said. A U.S. judge has dismissed wrongful death claims brought against Drummond Co. for its alleged links to the killings of three union leaders at the Alabama coal company's huge mine in Colombia. Paul Schaefer, a former Nazi corporal and founder of a mysterious German enclave in southern Chile, died Saturday in a prison hospital where he was serving 20 years for sexually abusing children, prison officials said. Bring back the goons. Seriously. Make 'em wear court jesters' outfits with clanging bells and fool's caps, and let 'em grapple and maul like in the good old days, a few years ago. The requiem mass for the funeral Friday of Pope John Paul II will follow centuries of solemn ritual befitting the final farewell to the head of the Roman Catholic Church. A new study of state achievement tests offers evidence that the No Child Left Behind law's core mission -- to push all students to score well in reading and math -- is undermined by wide variations in how states define a passing score. Jeff Weaver retired 18 in a row after escaping a bases-loaded threat and pitched into the eighth inning on a hot, muggy night, leading the Detroit Tigers to a 3-1 victory Tuesday over the Cincinnati Reds. Republican George W. Bush said Sunday night that he and Dick Cheney will undertake the responsibility of preparing to serve as the next president and vice president of the United States."
+                         ,result[11].content)
+
+    def test_custom(self):
+        new_file, filename = tempfile.mkstemp()
+        os.write(new_file, b"News_ID,article\n0,test\n1,hello,world\n100,0\n")
+        result = load_dataset_to_csv(filename)
+        self.assertEqual(3,len(result))
+        self.assertEqual("test",result[0].content)
+
 
 class TestJaccardSim(unittest.TestCase):
     def test_normal(self):
@@ -41,6 +53,14 @@ class TestJaccardSim(unittest.TestCase):
         set1 = (1, 4, 5, 6)
         set2 = (5, 8, 9, 10, 4 ,6)
         self.assertEqual(3 / 7, Jaccard_sim(set1, set2))
+
+class TestLSH(unittest.TestCase):
+    def test1(self):
+        loaded=load_dataset_to_csv("dataset/news_articles_small.csv")
+        make_shingles(loaded)
+        hash_shingles(loaded)
+        minhash_shingles(loaded, 20)
+        bucketed = LSH(loaded, 5, 4)
 
 if __name__ == '__main__':
     unittest.main()
