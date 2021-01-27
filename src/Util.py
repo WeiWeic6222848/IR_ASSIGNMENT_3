@@ -64,6 +64,7 @@ def load_dataset_from_csv(filename, preprocess=True):
 
 def make_shingles(articles):
     for article in articles:
+        article.shingles=[]
         for i in range(len(article.tokens) - 1):
             article.shingles.append(article.tokens[i] + " " + article.tokens[i + 1])
 
@@ -81,11 +82,13 @@ def hash_funcs(k):
 
 def minhash_shingles(articles, hash_funcs):
     for article in articles:
+        result=[]
         for j in range(len(hash_funcs)):
+            hashed=[]
             for i in range(len(article.shingles)):
-                article.shingles[i] = hash_funcs[j](article.shingles[i])
-            article.min_hashed_shingles.append(min(article.shingles))
-
+                hashed.append(hash_funcs[j](article.shingles[i]))
+            result.append(min(hashed))
+        article.min_hashed_shingles=result
 
 def calculateBestBandRowCombination(similarityThresholdLow, similarityThresholdHigh, signatureMatrixLength, boostHigh=1,
                                     boostLow=1):

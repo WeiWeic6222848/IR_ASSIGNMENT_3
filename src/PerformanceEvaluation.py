@@ -24,16 +24,16 @@ if __name__ == "__main__":
                 buckets = LSH(data, low, high)
                 foundArticle = 0
                 for i in range(10):  # try to randomly sample 10 plagiarized articles
-                    sampleArticle = deepcopy(
-                        data[random.randrange(0, len(data) - 1)])  # take a random article from collection
-                    for d in range(random.randrange(1, 3)):
-                        sampleArticle.shingles.pop(
-                            random.randrange(0, len(sampleArticle.shingles) - 1))  # remove some shingles
-                    for a in range(random.randrange(1, 3)):
-                        sampleArticle.shingles.append(random.randrange(-2 ** 64, 2 ** 64))  # add some shingles
-                    for c in range(random.randrange(1, 3)):
+
+                    sampleArticle = data[random.randrange(0, len(data) - 1)]  # take a random article from collection
+                    originalArticle =sampleArticle
+                    sampleArticle = NewsArticle(sampleArticle.ID,sampleArticle.content)
+                    make_shingles([sampleArticle])
+                    hash_shingles([sampleArticle])
+                    # change 5% of the shingles --> results in 95/105=90.5% similarity on jaccard index
+                    for c in range(int(len(sampleArticle.shingles)/20)):
                         sampleArticle.shingles[random.randrange(0, len(sampleArticle.shingles) - 1)] = \
-                            random.randrange(-2 ** 64, 2 ** 64)  # change some shingles
+                            random.randrange(-2 ** 64, 2 ** 64)
                     minhash_shingles([sampleArticle], hashfuncs)  # minhash the sample article
                     queryHash = LSH([sampleArticle], low, high)  # hash the sample article
                     candidates = set()
