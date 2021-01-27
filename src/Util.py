@@ -103,16 +103,15 @@ def calculateBestBandRowCombination(similarityThresholdLow, similarityThresholdH
     bestScore = 0
     for band, row in divisors:
         # maximize high similarity hashing chance while minimizing low similarity hashing chance
-        hashChanceHigh = 1 - (1 - similarityThresholdHigh ** row) ** band
-        hashChanceLow = 1 - (1 - similarityThresholdLow ** row) ** band
+        hashChanceHigh = 1 - (1 - similarityThresholdHigh ** row) ** band  # formula
+        hashChanceLow = 1 - (1 - similarityThresholdLow ** row) ** band  # formula
         score = hashChanceHigh * boostHigh - hashChanceLow / boostLow  # maximizing difference
-        print(hashChanceHigh)
         if (score > bestScore):
             bestScore = score
             bestCombination = (band, row)
             bestLowHigh = (hashChanceLow, hashChanceHigh)
 
-    print("low={},high={},band,row={}".format(bestLowHigh[0], bestLowHigh[1], bestCombination))
+    # print("low={},high={},band,row={}".format(bestLowHigh[0], bestLowHigh[1], bestCombination))
     return bestCombination
 
 
