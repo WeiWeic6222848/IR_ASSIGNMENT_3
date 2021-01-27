@@ -2,7 +2,7 @@ from Util import *
 
 import operator
 if __name__ == '__main__':
-    data = load_dataset_to_csv("dataset/news_articles_small.csv")
+    data = load_dataset_to_csv("dataset/news_articles_small.csv",preprocess=False)
     make_shingles(data)
     hash_shingles(data)
     d = {"0-10":0,
@@ -17,8 +17,10 @@ if __name__ == '__main__':
          "90-100": 0,
          }
     temp={}
-    for article1 in data:
-        for article2 in data:
+    for i in range(len(data)):
+        article1=data[i]
+        for j in range(i,len(data)):
+            article2=data[j]
             if article1 != article2:
                 sim = Jaccard_sim(article1.shingles,article2.shingles)
                 temp[(article1.ID,article2.ID)]=sim

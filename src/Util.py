@@ -39,7 +39,7 @@ def Jaccard_sim(set1, set2):
     return intersec_size / union_size
 
 
-def load_dataset_to_csv(filename):
+def load_dataset_to_csv(filename,preprocess=True):
     with open(filename) as f:
         f.readline()  # skip line 1
         parsing = f.readline()
@@ -49,7 +49,7 @@ def load_dataset_to_csv(filename):
             parsing[1] = parsing[1] \
                 .strip().strip("\"")  # striping white spaces in the end, then strip unnecessary symbol
             assert (len(parsing) == 2)  # asserting column size
-            result.append(NewsArticle(parsing[0], parsing[1]))  # we inherently know there are two columns
+            result.append(NewsArticle(parsing[0], parsing[1],preprocess))  # we inherently know there are two columns
             parsing = f.readline()
         return result
 
