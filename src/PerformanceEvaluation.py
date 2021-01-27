@@ -4,9 +4,9 @@ import sys
 
 from Util import *
 
-MatrixSizes = [30,35,40,45]
-similarityLow = [0.3, 0.4, 0.5, 0.6, 0.7, 0.8]
-similarityHigh = [0.7, 0.8, 0.9]
+MatrixSizes = [10]
+similarityLow = [0.001,0.01,0.1]
+similarityHigh = [0.8]
 similarityThreshHolds = [0.7, 0.8, 0.9]
 
 random.seed(0)
@@ -25,11 +25,14 @@ if __name__ == "__main__":
                 hashfuncs = hash_funcs(k)
                 minhash_shingles(data, hashfuncs)
                 buckets = LSH(data, low, high)
+
                 precision = dict()
                 correctResults = dict()
                 for si in similarityThreshHolds:
                     precision[si] = 0
                     correctResults[si] = 0
+
+
                 for s in sampleDocumentList:  # try to randomly sample 10 plagiarized articles
                     sampleArticle = data[s]  # take a random article from collection
                     originalArticle = sampleArticle
