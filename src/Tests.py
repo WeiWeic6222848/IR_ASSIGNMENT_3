@@ -61,6 +61,8 @@ class TestLSH(unittest.TestCase):
         hash_shingles(loaded)
         minhash_shingles(loaded, 20)
         bucketed = LSH(loaded, 5, 4)
+        write_buckets_to_csv(bucketed)
+        print(bucketed)
 
 if __name__ == '__main__':
     unittest.main()

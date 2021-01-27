@@ -1,5 +1,7 @@
 import random
 import matplotlib.pyplot as plt
+import csv
+
 stopwords = {"ourselves", "hers", "between", "yourself", "but", "again", "there", "about", "once", "during", "out",
              "very", "having", "with", "they", "own", "an", "be", "some", "for", "do", "its", "yours", "such", "into",
              "of", "most", "itself", "other", "off", "is", "s", "am", "or", "who", "as", "from", "him", "each", "the",
@@ -93,6 +95,8 @@ def LSH(articles, band, row, hashFunction=hash):
 
 
 
+
+
 def universal_hashing():
     def rand_prime():
         while True:
@@ -124,3 +128,10 @@ def plot_bargraph(data):
     plt.ylabel("Number of articles")
     plt.title("Number of articles in function of their similarity with each other (using 1000 articles)")
     plt.show()
+
+
+def write_buckets_to_csv(buckets):
+    with open('lsh_buckets.csv', mode='w',newline='') as lsh_buckets:
+        bucket_writer = csv.writer(lsh_buckets)
+        for key,value in buckets.items():
+            bucket_writer.writerow((key,value))
