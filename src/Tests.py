@@ -62,7 +62,7 @@ class TestLSH(unittest.TestCase):
         loaded=load_dataset_from_csv("dataset/news_articles_small.csv")
         make_shingles(loaded)
         hash_shingles(loaded)
-        minhash_shingles(loaded, 20)
+        minhash_shingles(loaded, hash_funcs(20))
         bucketed = LSH(loaded, 0.3, 0.8)
         write_buckets_to_csv(bucketed)
         print(bucketed)

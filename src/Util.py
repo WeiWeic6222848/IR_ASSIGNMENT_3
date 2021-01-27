@@ -27,7 +27,8 @@ class NewsArticle():
         if not preprocessing:
             self.tokens = list(dict.fromkeys(content.split()))
         else:
-            content = content.casefold().replace(",", "").replace(".", "")  # casefolding and remove punctuations
+
+            content = content.casefold().replace(",", "").replace(".", "").replace("!","")  # casefolding and remove punctuations
             token = dict.fromkeys(content.split())
             for word in stopwords:
                 token.pop(word, None)  # remove all frequent stopwords
@@ -72,13 +73,15 @@ def hash_shingles(articles):
         for i in range(len(article.shingles)):
             article.shingles[i] = hash(article.shingles[i])
 
-
-def minhash_shingles(articles, k):  # k = number of hash functions to use
+def hash_funcs(k):
     hash_funcs = []
     for i in range(k):
         hash_funcs.append(universal_hashing())
+    return hash_funcs
+
+def minhash_shingles(articles, hash_funcs):
     for article in articles:
-        for j in range(k):
+        for j in range(len(hash_funcs)):
             for i in range(len(article.shingles)):
                 article.shingles[i] = hash_funcs[j](article.shingles[i])
             article.min_hashed_shingles.append(min(article.shingles))
@@ -129,7 +132,6 @@ def LSH(articles, similarityLow, similarityHigh, hashFunction=hash):
             bucket.append(article.ID)
             buckets[hashed] = bucket  # put into bucket
     return buckets
-
 
 def universal_hashing():
     def rand_prime():
@@ -183,5 +185,13 @@ def load_bucket_from_csv(filename):
             dict[int(row[0])] = ast.literal_eval(row[1])
         return dict
 
+
+
+
+def write_result_to_csv(results):
+    with open('result.csv', mode='w',newline='') as result:
+        result_writer = csv.writer(result)
+        for item in results:
+            result_writer.writerow((item[0],item[1]))
 
 load_bucket_from_csv("lsh_buckets.csv")
