@@ -60,7 +60,7 @@ class TestLSH(unittest.TestCase):
         make_shingles(loaded)
         hash_shingles(loaded)
         minhash_shingles(loaded, 20)
-        bucketed = LSH(loaded, 5, 4)
+        bucketed = LSH(loaded, 0.1, 0.9)
 
 if __name__ == '__main__':
     unittest.main()
