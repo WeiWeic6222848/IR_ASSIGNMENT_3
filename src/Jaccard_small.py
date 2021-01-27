@@ -2,7 +2,7 @@ from Util import *
 
 import operator
 if __name__ == '__main__':
-    data = load_dataset_to_csv("dataset/news_articles_small.csv",preprocess=False)
+    data = load_dataset_from_csv("dataset/news_articles_small.csv", preprocess=False)
     make_shingles(data)
     hash_shingles(data)
     d = {"0-10":0,

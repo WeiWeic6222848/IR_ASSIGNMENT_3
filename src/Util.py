@@ -3,6 +3,7 @@ import random
 import matplotlib.pyplot as plt
 
 import csv
+import ast
 
 stopwords = {"ourselves", "hers", "between", "yourself", "but", "again", "there", "about", "once", "during", "out",
              "very", "having", "with", "they", "own", "an", "be", "some", "for", "do", "its", "yours", "such", "into",
@@ -44,8 +45,9 @@ def Jaccard_sim(set1, set2):
     return intersec_size / union_size
 
 
-def load_dataset_to_csv(filename, preprocess=True):
+def load_dataset_from_csv(filename, preprocess=True):
     with open(filename) as f:
+        # cannot use a traditional csv reader as the content of article contains comma --> wrong column reading.
         f.readline()  # skip line 1
         parsing = f.readline()
         result = []
@@ -111,12 +113,9 @@ def calculateBestBandRowCombination(similarityThresholdLow, similarityThresholdH
     return bestCombination
 
 
-calculateBestBandRowCombination(0.5, 0.9, 200)
-
-
 def LSH(articles, similarityLow, similarityHigh, hashFunction=hash):
     assert (len(articles) > 0)  # no empty matrix
-    band,row=calculateBestBandRowCombination(similarityLow,similarityHigh,len(articles[0].min_hashed_shingles))
+    band, row = calculateBestBandRowCombination(similarityLow, similarityHigh, len(articles[0].min_hashed_shingles))
     assert (len(articles[0].min_hashed_shingles) == band * row)  # matrix length = band*row
     buckets = dict()
     for i in range(band):
@@ -130,9 +129,6 @@ def LSH(articles, similarityLow, similarityHigh, hashFunction=hash):
             bucket.append(article.ID)
             buckets[hashed] = bucket  # put into bucket
     return buckets
-
-
-
 
 
 def universal_hashing():
@@ -173,7 +169,19 @@ def plot_bargraph(data):
 
 
 def write_buckets_to_csv(buckets):
-    with open('lsh_buckets.csv', mode='w',newline='') as lsh_buckets:
+    with open('lsh_buckets.csv', mode='w', newline='') as lsh_buckets:
         bucket_writer = csv.writer(lsh_buckets)
-        for key,value in buckets.items():
-            bucket_writer.writerow((key,value))
+        for key, value in buckets.items():
+            bucket_writer.writerow((key, value))
+
+
+def load_bucket_from_csv(filename):
+    with open(filename, mode='r') as lsh_buckets:
+        bucket_reader = csv.reader(lsh_buckets)
+        dict = {}
+        for row in bucket_reader:
+            dict[int(row[0])] = ast.literal_eval(row[1])
+        return dict
+
+
+load_bucket_from_csv("lsh_buckets.csv")
