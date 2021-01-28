@@ -118,9 +118,11 @@ def calculateBestBandRowCombination(similarityThresholdLow, similarityThresholdH
     return bestCombination
 
 
-def LSH(articles, similarityLow, similarityHigh, hashFunction=hash):
+def LSH(articles, similarityLow, similarityHigh, hashFunction=hash, preferRecall=False):
     assert (len(articles) > 0)  # no empty matrix
-    band, row = calculateBestBandRowCombination(similarityLow, similarityHigh, len(articles[0].min_hashed_shingles))
+    # if recall is preferred, calculate the highest possible recall and ignore precision
+    band, row = calculateBestBandRowCombination(similarityLow, similarityHigh, len(articles[0].min_hashed_shingles),
+                                                boostHigh=preferRecall*10)
     assert (len(articles[0].min_hashed_shingles) == band * row)  # matrix length = band*row
     buckets = dict()
     for i in range(band):
