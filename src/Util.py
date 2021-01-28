@@ -35,6 +35,7 @@ class NewsArticle():
             self.tokens = list(token)
 
 
+"""Calculate Jaccard similarity between two sets"""
 def Jaccard_sim(set1, set2):
     if not isinstance(set1, set):
         set1 = set(set1)
@@ -69,16 +70,20 @@ def make_shingles(articles):
             article.shingles.append(article.tokens[i] + " " + article.tokens[i + 1])
 
 
+"""Hash the shingles to an integer value"""
 def hash_shingles(articles):
     for article in articles:
         for i in range(len(article.shingles)):
             article.shingles[i] = hash(article.shingles[i])
 
+
+"""Returns a list k unique hash functions"""
 def hash_funcs(k):
     hash_funcs = []
     for i in range(k):
         hash_funcs.append(universal_hashing())
     return hash_funcs
+
 
 def minhash_shingles(articles, hash_funcs):
     for article in articles:
@@ -89,6 +94,7 @@ def minhash_shingles(articles, hash_funcs):
                 hashed.append(hash_funcs[j](article.shingles[i]))
             result.append(min(hashed))
         article.min_hashed_shingles=result
+
 
 def calculateBestBandRowCombination(similarityThresholdLow, similarityThresholdHigh, signatureMatrixLength, boostHigh=1,
                                     boostLow=1):
@@ -137,6 +143,11 @@ def LSH(articles, similarityLow, similarityHigh, hashFunction=hash, preferRecall
             buckets[hashed] = bucket  # put into bucket
     return buckets
 
+
+"""
+Produces a family of hash functions.
+Reference:https://stackoverflow.com/questions/2255604/hash-functions-family-generator-in-python
+"""
 def universal_hashing():
     def rand_prime():
         while True:
@@ -188,14 +199,3 @@ def load_bucket_from_csv(filename):
         for row in bucket_reader:
             dict[int(row[0])] = ast.literal_eval(row[1])
         return dict
-
-
-
-
-def write_result_to_csv(results):
-    with open('result.csv', mode='w',newline='') as result:
-        result_writer = csv.writer(result)
-        for item in results:
-            result_writer.writerow((item[0],item[1]))
-
-load_bucket_from_csv("lsh_buckets.csv")
