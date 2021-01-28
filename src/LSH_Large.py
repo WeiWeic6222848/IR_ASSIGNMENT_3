@@ -23,10 +23,8 @@ if __name__ == "__main__":
         if len(candidate) > 1:
             # if there are more than one element
             for i1 in range(len(candidate)):
-                print(int(candidate[i1]))
                 article1 = data[int(candidate[i1])]  # assume ID = row ID
                 for i2 in range(i1+1, len(candidate)):
-                    print(int(candidate[i2]))
                     article2 = data[int(candidate[i2])]  # assume ID = row ID
 
                     # calculate Jaccard index
