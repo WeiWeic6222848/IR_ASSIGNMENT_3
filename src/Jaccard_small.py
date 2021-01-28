@@ -19,7 +19,7 @@ if __name__ == '__main__':
     temp={}
     for i in range(len(data)):
         article1=data[i]
-        for j in range(i,len(data)):
+        for j in range(i+1,len(data)):
             article2=data[j]
             if article1 != article2:
                 sim = Jaccard_sim(article1.shingles,article2.shingles)
