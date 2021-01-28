@@ -1,6 +1,6 @@
 from Util import *
 
-import operator
+
 if __name__ == '__main__':
     data = load_dataset_from_csv("dataset/news_articles_small.csv", preprocess=False)
     make_shingles(data)
@@ -44,7 +44,6 @@ if __name__ == '__main__':
                     d["80-90"] += 1
                 else:
                     d["90-100"] += 1
-
-    a = max(temp.items(), key=operator.itemgetter(1))[0]
-    print(a)
+    for k, v in d.items():
+        print("["+k + "]: ", v)
     plot_bargraph(d)
