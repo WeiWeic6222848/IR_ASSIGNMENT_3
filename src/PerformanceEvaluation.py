@@ -20,7 +20,7 @@ if __name__ == "__main__":
                 if (low >= high): continue
                 hashfuncs = hash_funcs(k)
                 minhash_shingles(data, hashfuncs)
-                buckets = LSH(data, low, high)
+                buckets = lsh(data, low, high)
 
                 precision = dict()
                 correctResults = dict()
@@ -40,7 +40,7 @@ if __name__ == "__main__":
                         sampleArticle.shingles[random.randrange(0, len(sampleArticle.shingles) - 1)] = \
                             random.randrange(-2 ** 64, 2 ** 64)
                     minhash_shingles([sampleArticle], hashfuncs)  # minhash the sample article
-                    queryHash = LSH([sampleArticle], low, high)  # hash the sample article
+                    queryHash = lsh([sampleArticle], low, high)  # hash the sample article
                     candidates = set()
                     for key in queryHash.keys():
                         candidates.update(buckets.get(key, []))
@@ -54,7 +54,7 @@ if __name__ == "__main__":
                                 correct[si] += 1
                             continue
                         candidateDoc = data[int(r)]
-                        jaccard = Jaccard_sim(candidateDoc.shingles, sampleArticle.shingles)
+                        jaccard = jaccard_sim(candidateDoc.shingles, sampleArticle.shingles)
                         for si in similarityThreshHolds:
                             if (jaccard > si):
                                 correct[si] += 1

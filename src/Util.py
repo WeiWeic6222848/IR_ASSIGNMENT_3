@@ -36,7 +36,7 @@ class NewsArticle():
 
 
 """Calculate Jaccard similarity between two sets"""
-def Jaccard_sim(set1, set2):
+def jaccard_sim(set1, set2):
     if not isinstance(set1, set):
         set1 = set(set1)
     if not isinstance(set2, set):
@@ -96,8 +96,8 @@ def minhash_shingles(articles, hash_funcs):
         article.min_hashed_shingles=result
 
 
-def calculateBestBandRowCombination(similarityThresholdLow, similarityThresholdHigh, signatureMatrixLength, boostHigh=1,
-                                    boostLow=1):
+def calculate_best_bandrow_combination(similarityThresholdLow, similarityThresholdHigh, signatureMatrixLength, boostHigh=1,
+                                       boostLow=1):
     assert (isinstance(signatureMatrixLength, int))
     # calculate all integer divider of similarity Threshold
     root = math.ceil(math.sqrt(signatureMatrixLength))
@@ -124,11 +124,11 @@ def calculateBestBandRowCombination(similarityThresholdLow, similarityThresholdH
     return bestCombination
 
 
-def LSH(articles, similarityLow, similarityHigh, hashFunction=hash, preferRecall=False):
+def lsh(articles, similarityLow, similarityHigh, hashFunction=hash, preferRecall=False):
     assert (len(articles) > 0)  # no empty matrix
     # if recall is preferred, calculate the highest possible recall and ignore precision
-    band, row = calculateBestBandRowCombination(similarityLow, similarityHigh, len(articles[0].min_hashed_shingles),
-                                                boostHigh=preferRecall*10)
+    band, row = calculate_best_bandrow_combination(similarityLow, similarityHigh, len(articles[0].min_hashed_shingles),
+                                                   boostHigh=2 if preferRecall else 1)
     assert (len(articles[0].min_hashed_shingles) == band * row)  # matrix length = band*row
     buckets = dict()
     for i in range(band):

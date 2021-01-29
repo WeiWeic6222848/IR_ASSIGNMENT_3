@@ -22,7 +22,7 @@ if __name__ == '__main__':
         for j in range(i+1,len(data)):
             article2=data[j]
             if article1 != article2:
-                sim = Jaccard_sim(article1.shingles,article2.shingles)
+                sim = jaccard_sim(article1.shingles, article2.shingles)
                 temp[(article1.ID,article2.ID)]=sim
                 if sim < 0.10:
                     d["0-10"] += 1

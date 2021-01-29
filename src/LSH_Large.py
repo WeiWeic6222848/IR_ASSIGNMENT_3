@@ -14,7 +14,7 @@ if __name__ == "__main__":
     make_shingles(data)
     hash_shingles(data)
     minhash_shingles(data, hash_funcs(40))  # M=40
-    buckets = LSH(data, 0.3, 0.8, preferRecall=True)  # s1=0.3,s2=0.8, maximize recall -> b=10, r=4
+    buckets = lsh(data, 0.3, 0.8, preferRecall=True)  # s1=0.3,s2=0.8, maximize recall -> b=10, r=4
     result = set()
     totalfound = 0
     found = set()
@@ -30,11 +30,11 @@ if __name__ == "__main__":
                         totalfound += 1
                         found.add((article1.ID, article2.ID))
                     # calculate Jaccard index
-                    score = Jaccard_sim(article1.shingles, article2.shingles)
+                    score = jaccard_sim(article1.shingles, article2.shingles)
                     # if Jaccard index is bigger than 0.8, add to result
 
                     if score >= 0.8:
                         result.add((article1.ID, article2.ID))
 
-    print("found:{},correct:{}".format(totalfound, result))
+    print("found:{},correct:{}".format(totalfound, len(result)))
     write_result_to_csv(result)

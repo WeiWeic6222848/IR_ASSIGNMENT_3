@@ -35,27 +35,27 @@ class TestJaccardSim(unittest.TestCase):
     def test_normal(self):
         set1 = {1,4,5,6}
         set2 = {5,8,9,10}
-        self.assertEqual(1/7,Jaccard_sim(set1,set2))
+        self.assertEqual(1 / 7, jaccard_sim(set1, set2))
 
     def test_not_similar(self):
         set1 = {1,2,3,4}
         set2 = {5,6,7,8,9,10}
-        self.assertEqual(0,Jaccard_sim(set1,set2))
+        self.assertEqual(0, jaccard_sim(set1, set2))
 
     def test_duplicate(self):
         set1 = {1,2,3,4}
         set2 = {1,2,3,4}
-        self.assertEqual(1,Jaccard_sim(set1,set2))
+        self.assertEqual(1, jaccard_sim(set1, set2))
 
     def test_using_list_instead_of_set(self):
         set1 = [1, 4, 5, 6, 8]
         set2 = [5, 8, 9, 10]
-        self.assertEqual(2 / 7, Jaccard_sim(set1, set2))
+        self.assertEqual(2 / 7, jaccard_sim(set1, set2))
 
     def test_using_tuple_instead_of_set(self):
         set1 = (1, 4, 5, 6)
         set2 = (5, 8, 9, 10, 4 ,6)
-        self.assertEqual(3 / 7, Jaccard_sim(set1, set2))
+        self.assertEqual(3 / 7, jaccard_sim(set1, set2))
 
 class TestLSH(unittest.TestCase):
     def test1(self):
@@ -63,9 +63,8 @@ class TestLSH(unittest.TestCase):
         make_shingles(loaded)
         hash_shingles(loaded)
         minhash_shingles(loaded, hash_funcs(20))
-        bucketed = LSH(loaded, 0.3, 0.8)
+        bucketed = lsh(loaded, 0.3, 0.8)
         write_buckets_to_csv(bucketed)
-        print(bucketed)
 
 if __name__ == '__main__':
     unittest.main()
