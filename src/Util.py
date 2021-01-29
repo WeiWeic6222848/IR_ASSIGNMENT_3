@@ -28,7 +28,7 @@ class NewsArticle():
             self.tokens = list(dict.fromkeys(content.split()))
         else:
 
-            content = content.casefold().replace(",", "").replace(".", "").replace("!","")  # casefolding and remove punctuations
+            content = content.casefold().replace(",", "").replace(".", "").replace("!","").replace("?","")  # casefolding and remove punctuations
             token = dict.fromkeys(content.split())
             for word in stopwords:
                 token.pop(word, None)  # remove all frequent stopwords
