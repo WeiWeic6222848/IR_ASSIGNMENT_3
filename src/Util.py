@@ -108,7 +108,7 @@ def calculateBestBandRowCombination(similarityThresholdLow, similarityThresholdH
             divisors.append((int(signatureMatrixLength / i), i))
 
     bestCombination = None
-    bestLowHigh = None
+    # bestLowHigh = None
     bestScore = 0
     for band, row in divisors:
         # maximize high similarity hashing chance while minimizing low similarity hashing chance
@@ -118,7 +118,7 @@ def calculateBestBandRowCombination(similarityThresholdLow, similarityThresholdH
         if (score > bestScore):
             bestScore = score
             bestCombination = (band, row)
-            bestLowHigh = (hashChanceLow, hashChanceHigh)
+            # bestLowHigh = (hashChanceLow, hashChanceHigh)
 
     # print("low={},high={},band,row={}".format(bestLowHigh[0], bestLowHigh[1], bestCombination))
     return bestCombination

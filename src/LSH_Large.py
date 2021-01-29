@@ -1,7 +1,5 @@
 from Util import *
 
-from Util import *
-
 
 def write_result_to_csv(results):
     with open('result.csv', mode='w', newline='') as result:
